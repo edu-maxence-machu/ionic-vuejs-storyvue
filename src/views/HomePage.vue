@@ -1,13 +1,21 @@
 <template>
   <ion-page>
-    <ion-content class="cs-dark-bg" :fullscreen="true">
+    <ion-content class="cs-dark-bg" :style="fullScreenBg" :fullscreen="true">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="6" :key="photo" v-for="photo in photos">
+            <ion-img :src="photo.webviewPath"></ion-img>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
       <ion-fab
         vertical="bottom"
         class="ion-padding-bottom"
         horizontal="center"
         slot="fixed"
       >
-        <ion-fab-button color="dark" @click="openLibrary()">
+        <ion-fab-button color="dark" @click="takePhoto()">
           <ion-icon :icon="camera"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -18,7 +26,7 @@
         horizontal="left"
         slot="fixed"
       >
-        <ion-fab-button color="dark" @click="takePhoto()">
+        <ion-fab-button color="dark" @click="openFolder()">
           <ion-icon :icon="folder"></ion-icon>
         </ion-fab-button>
       </ion-fab>
@@ -42,10 +50,13 @@ ion-content {
   --background: #000 no-repeat center center / cover;
 }
 </style>
+
 <script>
 import { IonContent, IonPage } from "@ionic/vue";
 import { defineComponent } from "vue";
 import { camera, folder, sync } from "ionicons/icons";
+import { usePhotoGallery } from "@/composables/usePhotoGallery";
+
 export default defineComponent({
   name: "HomePage",
   components: {
@@ -53,10 +64,10 @@ export default defineComponent({
     IonPage,
   },
   setup() {
+    const { takePhoto } = usePhotoGallery();
+
     return {
-      takePhoto() {
-        alert("take photo");
-      },
+      takePhoto,
       openLibrary() {
         alert("open lib");
       },
